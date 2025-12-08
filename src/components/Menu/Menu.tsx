@@ -372,6 +372,8 @@ const Menu = ({
 
     const { animation } = theme;
 
+    prevRendered.current = false;
+
     Animated.timing(opacityAnimationRef.current, {
       toValue: 0,
       duration: ANIMATION_DURATION * animation.scale,
@@ -381,7 +383,6 @@ const Menu = ({
       if (finished) {
         setMenuLayout({ width: 0, height: 0 });
         setRendered(false);
-        prevRendered.current = false;
         focusFirstDOMNode(anchorRef.current);
       }
     });
