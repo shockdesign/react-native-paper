@@ -359,11 +359,9 @@ const Menu = ({
         easing: EASING,
         useNativeDriver: true,
       }),
-    ]).start(({ finished }) => {
-      if (finished) {
-        focusFirstDOMNode(menuRef.current);
-        prevRendered.current = true;
-      }
+    ]).start(() => {
+      focusFirstDOMNode(menuRef.current);
+      prevRendered.current = true;
     });
   }, [anchor, attachListeners, measureAnchorLayout, theme]);
 
@@ -372,19 +370,15 @@ const Menu = ({
 
     const { animation } = theme;
 
-    prevRendered.current = false;
-
     Animated.timing(opacityAnimationRef.current, {
       toValue: 0,
       duration: ANIMATION_DURATION * animation.scale,
       easing: EASING,
       useNativeDriver: true,
-    }).start(({ finished }) => {
-      if (finished) {
-        setMenuLayout({ width: 0, height: 0 });
-        setRendered(false);
-        focusFirstDOMNode(anchorRef.current);
-      }
+    }).start(() => {
+      setMenuLayout({ width: 0, height: 0 });
+      prevRendered.current = false;
+      focusFirstDOMNode(anchorRef.current);
     });
   }, [removeListeners, theme]);
 
@@ -395,10 +389,7 @@ const Menu = ({
       await Promise.resolve().then(() => {
         if (display && !prevRendered.current) {
           show();
-          return;
-        }
-
-        if (!display && prevRendered.current) {
+        } else if (!display && prevRendered.current) {
           hide();
         }
 
